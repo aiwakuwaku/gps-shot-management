@@ -15,15 +15,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GolfShotPRO">
-    
-    <!-- manifestのリンクにバージョンを付与して強制更新 -->
     <link rel="manifest" href="manifest.json?v=3">
 
+    <!-- 外部ライブラリ -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
     <style>
-        [v-cloak] { display: none; }
+        /* v-cloak: Vueの読み込みが完了するまで生コードを表示させないための設定 */
+        [v-cloak] { display: none !important; }
+        
         select, input { font-size: 16px !important; }
         .header-grid { display: grid; grid-template-columns: 60px 1fr 60px; align-items: center; height: 64px; background-color: black; color: white; position: sticky; top: 0; z-index: 20; }
         .nav-bar { background-color: #121212; height: 70px; display: flex; align-items: center; justify-content: space-around; border-top: 1px solid #222; }
@@ -104,13 +106,6 @@
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-4">
                             <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">スコアカードの記号</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="text-red-600 font-bold">◯囲みスコア:</span> バーディ以下</li><li><span class="text-blue-600 font-bold">△囲みスコア:</span> ボギー</li><li><span class="text-gray-900 font-bold">□囲みスコア:</span> ダブルボギー以上</li><li><span class="text-green-600 font-bold italic">Hの◯囲み:</span> <span class="font-bold">Scramble</span> 成功。寄せワン。</li><li><span class="font-bold italic text-gray-800">Bの◯囲み:</span> <span class="font-bold text-gray-800">Sand Save</span> 成功。バンカーから2打以内。</li></ul></div>
                             <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">統計メトリクス</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="font-bold text-gray-800">GIR (パーオン率):</span> 規定打数マイナス2打以下でグリーンに乗せた割合。</li><li><span class="font-bold text-gray-800">Score Loss:</span> OB(2打失)、PN/☓(1打失)の損失合計。</li></ul></div>
-                        </div>
-                    </section>
-
-                    <section class="space-y-3">
-                        <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left">特殊ルール</h3>
-                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-[11px] text-purple-900 leading-relaxed text-left">
-                            <p>「OB」または「PN」を選択すると、罰打を考慮し、次の1打分は自動的に罰打としてスキップされます。1打目OBなら次は3打目から入力します。</p>
                         </div>
                     </section>
 
@@ -319,13 +314,14 @@
             <button @click="changeView('history')" class="nav-item" :class="view === 'history' ? 'nav-active' : 'nav-inactive'"><div class="icon-container"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div><span class="nav-label">Hist</span></button>
         </nav>
         
+        <!-- 不要になった datalist を削除し、selectに変更済み -->
     </div>
 
     <script>
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
             setup() {
-                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v4';
+                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v5';
                 const M_TO_YD = 1.09361;
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
@@ -477,7 +473,7 @@
                 const relativeScoreColor = computed(() => { let d = 0; for(let i=0; i<18; i++) { const p = getHolePar(i); if(p > 0 && holeResults.value[i].score > 0) d += (holeResults.value[i].score - p); } return d > 0 ? 'text-red-400' : (d < 0 ? 'text-blue-400' : 'text-gray-300'); });
                 const countStat = (h, k) => holeResults.value[h].shots.filter(s => s[k]).length;
                 const calculateHalfTotal = (hIdx) => { let par = 0, scr = 0, pt = 0, fw = 0, ob = 0, pn = 0, bk = 0; for(let i=0; i<9; i++) { const idx = (hIdx * 9) + i, h = holeResults.value[idx], p = getHolePar(idx); par += p; scr += h.score; pt += h.putts; fw += (h.fw ? 1 : 0); ob += h.shots.filter(s=>s.ob).length; pn += h.shots.filter(s=>s.penalty).length; bk += h.shots.filter(s=>s.bunker).length; } return { par, score: scr, putts: pt, fw, ob, pn, bk }; };
-                const grandTotals = computed(() => { let par = 0, pt = 0; for(let i=0; i<18; i++) { par += getHolePar(i); pt += holeResults.value[i].putts; } return { par, pt }; });
+                const grandTotals = computed(() => { let par = 0, pt = 0; for(let i=0; i<18; i++) { par += getHolePar(i); pt += holeResults.value[i].putts; } return { par, putts: pt }; });
 
                 const processCsvData = (d) => { const parsed =[]; let cur = null; d.forEach(row => { if (row[1] === 'H1') { cur = { id: row[0], name: row[0], sections:[] }; parsed.push(cur); } else if (cur && row[0] && row[1]?.match(/^\d+$/)) { cur.sections.push({ name: row[0], pars: row.slice(1, 10).map(Number) }); } }); courses.value = parsed; localStorage.setItem('golf_courses', JSON.stringify(parsed)); settings.value.prefix = 'index'; };
                 const importCsv = (e) => { if (!e.target.files[0]) return; Papa.parse(e.target.files[0], { header: false, skipEmptyLines: true, complete: (res) => processCsvData(res.data) }); };
