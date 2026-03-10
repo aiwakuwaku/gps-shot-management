@@ -1,4 +1,4 @@
-const CACHE_NAME = 'golf-app-v14-final-offline-fix';
+const CACHE_NAME = 'golf-app-v30-final-offline-stable';
 const urlsToCache = [
   './',
   './index.html',
@@ -13,8 +13,12 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // 外部CDNファイルをスマホ内に「最優先」でダウンロードして保存
-      return cache.addAll(urlsToCache);
+      // 一つずつ確実にキャッシュに入れる
+      return Promise.all(
+        urlsToCache.map(url => {
+          return cache.add(url).catch(err => console.error('Cache add error:', url, err));
+        })
+      );
     })
   );
   self.skipWaiting();
@@ -35,20 +39,21 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 通信処理：オフライン時は何があってもキャッシュから返す
+// 通信処理：キャッシュ第一 (Cache-First)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
+      // スマホの中に保存されたファイルがあれば即座にそれを返す
       if (response) {
-        return response; // 保存済みのVue.js等を返す
+        return response;
       }
-      return fetch(event.request).then((res) => {
+      // なければインターネットへ取りにいく
+      return fetch(event.request).then((networkResponse) => {
         return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, res.clone());
-          return res;
+          // ついでに保存しておく
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
         });
-      }).catch(() => {
-        // オフラインかつキャッシュなし（基本発生しない）
       });
     })
   );
