@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -12,16 +12,19 @@
     <link rel="shortcut icon" href="icon-192.png?v=4">
     <link rel="apple-touch-icon" href="icon-512.png?v=4">
 
+
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GolfShotPRO">
     <link rel="manifest" href="manifest.json?v=4">
 
+
     <!-- 外部ライブラリ (CDN) -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
 
     <style>
         /* v-cloak: Vueの読み込みが完了するまで画面を非表示にする（{{...}}の露出を防ぐ） */
@@ -66,6 +69,7 @@
             <div></div>
         </header>
 
+
         <main class="p-4 flex-grow pb-24 overflow-y-auto">
             <!-- 0. Guide Screen -->
             <div v-if="view === 'guide'" class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -73,6 +77,7 @@
                     <h2 class="text-xl font-bold italic font-serif">Guide & Glossary</h2>
                     <button @click="view = isRoundStarted ? 'summary' : 'settings'" class="text-sm font-bold text-blue-600">Close</button>
                 </div>
+
 
                 <div class="space-y-8 pb-10 text-gray-700 text-[11px] leading-relaxed">
                     <section class="space-y-3">
@@ -84,6 +89,7 @@
                         </div>
                     </section>
 
+
                     <section class="space-y-3">
                         <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">操作の流れ</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 text-gray-700">
@@ -92,6 +98,7 @@
                             <div><p class="font-bold text-gray-900 mb-1">3. スコアチェック</p><p>「ショット数＋罰打＋パット」が入力したスコアと一致しない場合、警告が出て次へ進めません。</p></div>
                         </div>
                     </section>
+
 
                     <section class="space-y-3">
                         <h3 class="font-black text-orange-600 border-l-4 border-orange-600 pl-2 uppercase tracking-tighter">ショット判定の定義</h3>
@@ -102,6 +109,7 @@
                         </div>
                     </section>
 
+
                     <section class="space-y-3 text-left">
                         <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter">用語と記号の解説</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-4">
@@ -110,12 +118,14 @@
                         </div>
                     </section>
 
+
                     <section class="space-y-3">
                         <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left">特殊ルール</h3>
                         <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-[11px] text-purple-900 leading-relaxed text-left">
                             <p>「OB」または「PN」を選択すると、罰打を考慮し、次の1打分は自動的に罰打としてスキップされます。1打目OBなら次は3打目から入力します。</p>
                         </div>
                     </section>
+
 
                     <section class="space-y-3 text-left">
                         <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">中断して過去のデータを見るには</h3>
@@ -127,6 +137,7 @@
                     </section>
                 </div>
             </div>
+
 
             <!-- 1. Settings Screen -->
             <div v-if="view === 'settings'" class="space-y-6 animate-in fade-in duration-300">
@@ -159,6 +170,7 @@
                 </div>
             </div>
 
+
             <!-- 2. Hole Input Screen (Dropdown UI) -->
             <div v-if="view === 'hole'" class="space-y-4 animate-in fade-in duration-300">
                 <div class="flex justify-between items-center bg-gray-100 p-3 rounded border">
@@ -181,6 +193,7 @@
                         </div>
                     </div>
 
+
                     <div class="grid grid-cols-2 gap-2 mb-4">
                         <button @click="getGPSLocation('start')" :class="['py-2.5 rounded-lg text-[10px] font-black border transition shadow-sm', posA ? 'bg-green-100 border-green-500 text-green-700' : 'bg-gray-50 text-gray-500 border-gray-200']">
                             {{ posA ? '地点A OK ✓' : '地点A (打点) 取得' }}
@@ -189,6 +202,7 @@
                             {{ posB ? '地点B OK ✓' : '地点B (停止) 取得' }}
                         </button>
                     </div>
+
 
                     <div class="space-y-3">
                         <div class="flex items-center justify-between text-left">
@@ -203,6 +217,7 @@
                     <div v-if="currentShotData.result === '△'" class="flex gap-1 mt-3 text-left"><button v-for="d in ['L','R','F','B']" :key="d" @click="currentShotData.direction = d" :class="['flex-1 py-2 border rounded font-black text-xs transition shadow-sm', currentShotData.direction === d ? 'bg-blue-500 text-white border-blue-600 shadow-md' : 'bg-white text-gray-300']">{{ d }}</button></div>
                     <div v-if="currentShotData.result === '☓'" class="flex gap-1 mt-3 text-left"><button v-for="e in ['OB','PN','林']" :key="e" @click="setErrorType(e)" :class="['flex-1 py-2 border rounded font-black text-xs transition shadow-sm', currentShotData.errorType === e ? 'bg-red-600 text-white border-red-700 shadow-md' : 'bg-white text-gray-300']">{{ e }}</button></div>
 
+
                     <div class="mt-4 pt-4 border-t">
                         <div class="flex items-center justify-between gap-4">
                             <button @click="stepLateral(-5)" class="w-10 h-10 bg-gray-100 rounded-full text-lg font-black active:bg-gray-200 shadow-inner">－</button>
@@ -215,12 +230,14 @@
                     </div>
                 </div>
 
+
                 <div class="grid grid-cols-2 gap-4 text-center">
                     <div class="bg-gray-50 p-4 rounded-xl border shadow-sm text-gray-800"><label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">Score</label><div class="flex items-center justify-center gap-4"><button @click="updateScore(-1)" class="w-10 h-10 bg-white border rounded-full font-bold shadow-sm text-xl active:scale-90 transition">－</button><span class="text-4xl font-black w-10">{{ holeResults[currentHoleIndex].score }}</span><button @click="updateScore(1)" class="w-10 h-10 bg-white border rounded-full font-bold shadow-sm text-xl active:scale-90 transition">＋</button></div></div>
                     <div class="bg-gray-50 p-4 rounded-xl border shadow-sm text-gray-800"><label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">Putts</label><div class="flex items-center justify-center gap-4"><button @click="updatePutt(-1)" class="w-10 h-10 bg-white border rounded-full font-bold shadow-sm text-xl active:scale-90 transition">－</button><span class="text-4xl font-black w-10">{{ holeResults[currentHoleIndex].putts }}</span><button @click="updatePutt(1)" class="w-10 h-10 bg-white border rounded-full font-bold shadow-sm text-xl active:scale-90 transition">＋</button></div></div>
                 </div>
                 <button @click="resetCurrentShot" class="w-full py-4 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm uppercase active:bg-gray-300 transition shadow-sm">修正 (Reset Shot)</button>
             </div>
+
 
             <!-- 3. Card Screen -->
             <div v-if="view === 'summary'" class="space-y-6 pb-10 text-gray-800 animate-in fade-in duration-300">
@@ -255,6 +272,7 @@
                 <div class="grid grid-cols-2 gap-4"><button @click="saveRound" class="bg-green-600 text-white font-black py-5 rounded-2xl shadow-lg active:scale-95 transition uppercase tracking-widest">Save Round</button><button @click="confirmNewRound" class="bg-gray-200 text-red-500 font-black py-5 rounded-2xl shadow-lg active:scale-95 transition uppercase tracking-widest">Reset All</button></div>
             </div>
 
+
             <!-- 4. Stats Analysis Screen -->
             <div v-if="view === 'analysis'" class="space-y-6 pb-20 animate-in fade-in duration-300 text-gray-800 text-left">
                 <h2 class="text-xl font-bold border-b pb-1 text-gray-800 italic font-serif">Performance Analysis</h2>
@@ -264,6 +282,7 @@
                     <div class="bg-white p-4 rounded-xl border shadow-sm text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-1">平均Putts</div><div class="text-2xl font-black text-gray-800 italic font-bold">{{ historyStats.avgPutts }}</div><div class="text-[8px] text-orange-500 mt-1 font-bold italic">3P+ 平均: {{ historyStats.avgThreePutts }}回</div></div>
                 </div>
 
+
                 <div class="bg-white p-5 rounded-2xl border border-red-100 shadow-sm text-xs font-bold">
                     <h3 class="text-sm font-black text-red-600 mb-4 flex items-center gap-2 uppercase tracking-tighter italic font-black"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.45L19.53 19H4.47L12 5.45zM11 16h2v2h-2v-2zm0-7h2v5h-2V9z"/></svg>Score Loss Analysis</h3>
                     <div class="grid grid-cols-3 gap-3 text-center">
@@ -272,6 +291,7 @@
                         <div class="p-3 bg-red-50 rounded-xl border border-red-100 font-bold"><div class="text-[8px] text-gray-500 uppercase font-bold">3-Putts</div><div class="text-2xl font-black text-red-600 italic">{{ analysis.threePutts }}</div></div>
                     </div>
                 </div>
+
 
                 <div class="bg-white p-5 rounded-2xl border shadow-sm space-y-4 font-bold text-xs">
                     <h3 class="text-sm font-black text-gray-800 uppercase tracking-tighter italic">PAR別パフォーマンス</h3>
@@ -286,6 +306,7 @@
                     </div>
                 </div>
 
+
                 <div class="bg-white p-5 rounded-2xl border shadow-sm text-xs font-bold text-gray-600 uppercase">
                     <h3 class="text-sm font-black text-gray-800 mb-4 uppercase italic tracking-tighter">Skill Categories</h3>
                     <div v-for="(val, label) in analysis.categories" :key="label" class="mb-5 font-bold">
@@ -293,6 +314,7 @@
                         <div class="progress-bar"><div class="progress-fill shadow-inner" :style="{ width: val + '%', backgroundColor: val > 60 ? '#10b981' : val > 40 ? '#fbbf24' : '#ef4444' }"></div></div>
                     </div>
                 </div>
+
 
                 <div class="bg-white p-5 rounded-2xl border shadow-sm overflow-x-auto text-gray-700 font-bold">
                     <h3 class="text-sm font-black mb-4 italic uppercase tracking-tighter underline underline-offset-4">Club Performance & Distance</h3>
@@ -303,6 +325,7 @@
                 </div>
             </div>
 
+
             <!-- 5. History Screen -->
             <div v-if="view === 'history'" class="space-y-6 pb-20 animate-in fade-in duration-300 text-gray-800 text-left">
                 <div class="flex justify-between items-center border-b pb-2 text-gray-800"><h2 class="text-xl font-bold italic font-serif tracking-tight">Round History</h2><button @click="exportAllToCSV" v-if="savedRounds.length" class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-black shadow-md active:scale-95 transition">Export CSV</button></div>
@@ -312,6 +335,7 @@
                 </div>
             </div>
         </main>
+
 
         <!-- Navigation -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto nav-bar z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
@@ -324,6 +348,7 @@
         
     </div>
 
+
     <script>
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
@@ -333,6 +358,7 @@
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
 
+
                 const view = ref(restored.view || 'settings');
                 const isRoundStarted = ref(restored.isRoundStarted || false);
                 const currentHoleIndex = ref(restored.currentHoleIndex || 0);
@@ -340,14 +366,17 @@
                 const posA = ref(null);
                 const posB = ref(null);
 
+
                 const holeResults = ref(restored.holeResults || Array.from({ length: 18 }, () => ({ 
                     score: 0, putts: 2, fw: false, 
                     shots: Array.from({ length: 7 }, () => ({ club: '', result: '○', direction: '', errorType: '', ob: false, penalty: false, bunker: false, dist: null, lat: 0 })) 
                 })));
                 const settings = ref(restored.settings || { date: new Date().toISOString().substr(0, 10), prefix: 'index', courseId: '', front: '', back: '', selectedClubs:['1w', '3w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '52°', '58°', 'pt'] });
 
+
                 const courses = ref(JSON.parse(localStorage.getItem('golf_courses') || '[]'));
                 const savedRounds = ref(JSON.parse(localStorage.getItem('golf_saved_rounds') || '[]'));
+
 
                 onMounted(() => { 
                     if ('serviceWorker' in navigator) {
@@ -355,9 +384,11 @@
                     }
                 });
 
+
                 watch([view, isRoundStarted, currentHoleIndex, holeResults, settings], () => {
                     localStorage.setItem(PERSIST_KEY, JSON.stringify({ view: view.value, isRoundStarted: isRoundStarted.value, currentHoleIndex: currentHoleIndex.value, holeResults: holeResults.value, settings: settings.value }));
                 }, { deep: true });
+
 
                 const changeView = (v) => { view.value = v; };
                 const displayName = (n) => n?.includes('_') ? n.split('_')[1] : (n || '');
@@ -374,6 +405,7 @@
                 const currentSectionName = computed(() => currentHoleIndex.value < 9 ? settings.value.front : settings.value.back);
                 const currentPar = computed(() => getHolePar(currentHoleIndex.value));
 
+
                 const getGPSLocation = (type) => {
                     navigator.geolocation.getCurrentPosition((position) => {
                         const coords = { lat: position.coords.latitude, lng: position.coords.longitude };
@@ -381,6 +413,7 @@
                         else { posB.value = coords; calculateDist(); }
                     }, (err) => alert("GPSを許可してください"), { enableHighAccuracy: true });
                 };
+
 
                 const calculateDist = () => {
                     if (!posA.value || !posB.value) return;
@@ -392,13 +425,16 @@
                     currentShotData.value.dist = Math.round(distMeter * M_TO_YD);
                 };
 
+
                 const stepLateral = (v) => { currentShotData.value.lat = (currentShotData.value.lat || 0) + v; };
+
 
                 const isPenaltyStroke = (h, s) => {
                     if (s <= 0) return false;
                     const prev = holeResults.value[h]?.shots[s-1];
                     return !!(prev && (prev.errorType === 'OB' || prev.errorType === 'PN'));
                 };
+
 
                 const selectShot = (idx) => { if (!isPenaltyStroke(currentHoleIndex.value, idx)) { currentShotIdx.value = idx; posA.value = null; posB.value = null; } };
                 const setResult = (r) => { const s = currentShotData.value; s.result = r; s.direction = ''; s.errorType = ''; s.ob = false; s.penalty = false; };
@@ -413,6 +449,7 @@
                     let t3 = 0; savedRounds.value.forEach(r => r.holeResults.forEach(h => { if(h.putts >= 3) t3++; }));
                     return { avgScore: (scs.reduce((a,b)=>a+b,0)/scs.length).toFixed(1), bestScore: Math.min(...scs), worstScore: Math.max(...scs), avgPutts: (pts.reduce((a,b)=>a+b,0)/pts.length).toFixed(1), avgThreePutts: (t3/savedRounds.value.length).toFixed(1) };
                 });
+
 
                 const analysis = computed(() => {
                     let pL = 0, cM = 0, tP = 0; const cat = { "ティーショット": { ok: 0, t: 0 }, "アプローチ": { ok: 0, t: 0 }, "リカバリー": { ok: 0, t: 0 } }; const cMap = {};
@@ -437,11 +474,13 @@
                             if (s.dist) cMap[s.club].dists.push(s.dist);
                             if (s.lat !== undefined) cMap[s.club].lats.push(s.lat);
 
+
                             if (sIdx === 0) { cat["ティーショット"].t++; if (s.result === '○') cat["ティーショット"].ok++; } 
                             else if (['pw','48°','50°','52°','54°','56°','58°'].includes(s.club.toLowerCase())) { cat["アプローチ"].t++; if (s.result === '○') cat["アプローチ"].ok++; } 
                             if (sIdx > 0 && (h.shots[sIdx-1].result === '△' || h.shots[sIdx-1].result === '☓')) { cat["リカバリー"].t++; if (s.result === '○') cat["リカバリー"].ok++; } 
                         });
                     });
+
 
                     const cStats = Object.keys(cMap).map(n => { 
                         const m = cMap[n]; 
@@ -458,10 +497,12 @@
                     return { penaltyLoss: pL, criticalMissCount: cM, threePutts: tP, clubStats: cStats, categories: cats, parStats: pStats };
                 });
 
+
                 const saveRound = () => { const rD = { date: settings.value.date, course: displayName(selectedCourse.value?.name) || 'Unknown', totalScore: holeResults.value.reduce((a,b) => a + b.score, 0), totalPutts: holeResults.value.reduce((a,b) => a + b.putts, 0), holeResults: JSON.parse(JSON.stringify(holeResults.value)), courseSettings: { front: settings.value.front, back: settings.value.back, id: settings.value.courseId } }; savedRounds.value.unshift(rD); localStorage.setItem('golf_saved_rounds', JSON.stringify(savedRounds.value)); localStorage.removeItem(PERSIST_KEY); alert('Round saved!'); };
                 const deleteRound = (idx) => { if(confirm('ラウンド履歴を削除しますか？')) { savedRounds.value.splice(idx, 1); localStorage.setItem('golf_saved_rounds', JSON.stringify(savedRounds.value)); } };
                 const loadRoundData = (r) => { if(confirm('データを読み込みますか？ 現在の入力内容は上書きされます。')) { settings.value.date = r.date; if (r.courseSettings) { settings.value.courseId = r.courseSettings.id; settings.value.front = r.courseSettings.front; settings.value.back = r.courseSettings.back; } holeResults.value = JSON.parse(JSON.stringify(r.holeResults)); isRoundStarted.value = true; view.value = 'summary'; } };
                 const confirmNewRound = () => { if (confirm('データをリセットして新規ラウンドを開始しますか？')) { localStorage.removeItem(PERSIST_KEY); location.reload(); } };
+
 
                 const nextHole = () => { 
                     const res = holeResults.value[currentHoleIndex.value]; let sC = 0;
@@ -482,11 +523,13 @@
                 const calculateHalfTotal = (hIdx) => { let par = 0, scr = 0, pt = 0, fw = 0, ob = 0, pn = 0, bk = 0; for(let i=0; i<9; i++) { const idx = (hIdx * 9) + i, h = holeResults.value[idx], p = getHolePar(idx); par += p; scr += h.score; pt += h.putts; fw += (h.fw ? 1 : 0); ob += h.shots.filter(s=>s.ob).length; pn += h.shots.filter(s=>s.penalty).length; bk += h.shots.filter(s=>s.bunker).length; } return { par, score: scr, putts: pt, fw, ob, pn, bk }; };
                 const grandTotals = computed(() => { let par = 0, pt = 0; for(let i=0; i<18; i++) { par += getHolePar(i); pt += holeResults.value[i].putts; } return { par, pt }; });
 
+
                 const processCsvData = (d) => { const parsed =[]; let cur = null; d.forEach(row => { if (row[1] === 'H1') { cur = { id: row[0], name: row[0], sections:[] }; parsed.push(cur); } else if (cur && row[0] && row[1]?.match(/^\d+$/)) { cur.sections.push({ name: row[0], pars: row.slice(1, 10).map(Number) }); } }); courses.value = parsed; localStorage.setItem('golf_courses', JSON.stringify(parsed)); settings.value.prefix = 'index'; };
                 const importCsv = (e) => { if (!e.target.files[0]) return; Papa.parse(e.target.files[0], { header: false, skipEmptyLines: true, complete: (res) => processCsvData(res.data) }); };
                 const importFromServer = async () => { try { const r = await fetch('courses.csv'); if (!r.ok) throw new Error(); const t = await r.text(); Papa.parse(t, { header: false, skipEmptyLines: true, complete: (res) => { processCsvData(res.data); alert('Synced!'); } }); } catch (e) { alert('Sync failed'); } };
                 const autoSelectSections = () => { if (!selectedCourse.value) return; const ns = selectedCourse.value.sections.map(s => s.name); if (ns.includes('OUT') && ns.includes('IN')) { settings.value.front = 'OUT'; settings.value.back = 'IN'; } else if (ns.length >= 2) { settings.value.front = ns[0]; settings.value.back = ns[1]; } };
                 const syncSections = (t) => { if (selectedCourse.value && selectedCourse.value.sections.length === 2) { const ns = selectedCourse.value.sections.map(s => s.name); if (t === 'front') settings.value.back = ns.find(n => n !== settings.value.front); else settings.value.front = ns.find(n => n !== settings.value.back); } };
+
 
                 const exportAllToCSV = () => {
                     let csv = "";
@@ -563,6 +606,7 @@
                     l.click();
                     document.body.removeChild(l);
                 };
+
 
                 return { 
                     view, settings, prefixes, filteredCourses, selectedCourse, displayName, changeView, importCsv, importFromServer, autoSelectSections, syncSections, startRound, isRoundStarted, clubMaster, toggleClub, orderedClubs, 
