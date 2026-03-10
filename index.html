@@ -8,16 +8,16 @@
     <meta name="theme-color" content="#121212">
     
     <!-- アイコン・ファビコン設定 -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=4">
-    <link rel="shortcut icon" href="icon-192.png?v=4">
-    <link rel="apple-touch-icon" href="icon-512.png?v=4">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=5">
+    <link rel="shortcut icon" href="icon-192.png?v=5">
+    <link rel="apple-touch-icon" href="icon-512.png?v=5">
 
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GolfShotPRO">
-    <link rel="manifest" href="manifest.json?v=4">
+    <link rel="manifest" href="manifest.json?v=5">
 
 
     <!-- 外部ライブラリ (CDN) -->
@@ -27,7 +27,7 @@
 
 
     <style>
-        /* v-cloak: Vueの読み込みが完了するまで画面を非表示にする（{{...}}の露出を防ぐ） */
+        /* v-cloak: Vueの起動が完了するまで画面全体を隠す（{{...}}の露出を物理的に防ぐ） */
         [v-cloak] { display: none !important; }
         
         select, input { font-size: 16px !important; }
@@ -57,7 +57,7 @@
         <header class="header-grid shadow-lg">
             <div class="flex justify-center">
                 <button @click="changeView('guide')" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 active:bg-gray-700 transition shadow-inner">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" cy="17" x2="12.01" y2="17"></line></svg>
                 </button>
             </div>
             <div class="text-center flex items-center justify-center relative">
@@ -119,14 +119,6 @@
                     </section>
 
 
-                    <section class="space-y-3">
-                        <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left">特殊ルール</h3>
-                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-[11px] text-purple-900 leading-relaxed text-left">
-                            <p>「OB」または「PN」を選択すると、罰打を考慮し、次の1打分は自動的に罰打としてスキップされます。1打目OBなら次は3打目から入力します。</p>
-                        </div>
-                    </section>
-
-
                     <section class="space-y-3 text-left">
                         <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">中断して過去のデータを見るには</h3>
                         <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-xs space-y-2 text-blue-900 font-bold">
@@ -171,7 +163,7 @@
             </div>
 
 
-            <!-- 2. Hole Input Screen (Dropdown UI) -->
+            <!-- 2. Hole Input Screen -->
             <div v-if="view === 'hole'" class="space-y-4 animate-in fade-in duration-300">
                 <div class="flex justify-between items-center bg-gray-100 p-3 rounded border">
                     <button @click="prevHole" class="text-xl px-2">◀</button>
@@ -353,7 +345,7 @@
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
             setup() {
-                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v7';
+                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v7_final';
                 const M_TO_YD = 1.09361;
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
