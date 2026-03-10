@@ -1,6 +1,7 @@
 {
   "short_name": "GolfShotPRO",
   "name": "Golf Shot Manager PRO",
+  "id": "/golf_manager_pro_unique_v1",
   "icons": [
     {
       "src": "icon-192.png",

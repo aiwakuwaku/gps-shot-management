@@ -7,15 +7,17 @@
     <meta name="theme-color" content="#121212">
     
     <!-- アイコン・ファビコン設定 -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
-    <link rel="shortcut icon" href="icon-192.png?v=2">
-    <link rel="apple-touch-icon" href="icon-512.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=3">
+    <link rel="shortcut icon" href="icon-192.png?v=3">
+    <link rel="apple-touch-icon" href="icon-512.png?v=3">
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GolfShotPRO">
-    <link rel="manifest" href="manifest.json?v=2">
+    
+    <!-- manifestのリンクにバージョンを付与して強制更新 -->
+    <link rel="manifest" href="manifest.json?v=3">
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -154,7 +156,7 @@
                 </div>
             </div>
 
-            <!-- 2. Hole Input Screen (クラブ選択をドロップダウンへ変更) -->
+            <!-- 2. Hole Input Screen -->
             <div v-if="view === 'hole'" class="space-y-4 animate-in fade-in duration-300">
                 <div class="flex justify-between items-center bg-gray-100 p-3 rounded border">
                     <button @click="prevHole" class="text-xl px-2">◀</button>
@@ -166,8 +168,7 @@
                     <div class="flex justify-between items-center mb-4"><span class="text-xs font-black text-blue-800 uppercase italic">Shot {{ currentShotIdx + 1 }}</span><div class="flex gap-1 overflow-x-auto pb-1"><button v-for="n in 7" :key="n" @click="selectShot(n-1)" :disabled="isPenaltyStroke(currentHoleIndex, n-1)" :class="['w-8 h-8 flex-shrink-0 rounded-full border text-xs font-black transition shadow-sm', currentShotIdx === n-1 ? 'bg-blue-600 border-blue-800 text-white' : (isPenaltyStroke(currentHoleIndex, n-1) ? 'bg-gray-200 text-gray-400 border-gray-300 opacity-50' : 'bg-white text-gray-400')]">{{ n }}</button></div></div>
                     
                     <div class="grid grid-cols-3 gap-2 mb-4">
-                        <!-- ここを input から select に変更 -->
-                        <select v-model="currentShotData.club" class="col-span-2 border p-2 rounded bg-white font-bold h-[38px] shadow-sm text-gray-800 focus:outline-none">
+                        <select v-model="currentShotData.club" class="col-span-2 border p-2 rounded bg-white font-bold h-[38px] shadow-sm text-gray-800">
                             <option value="" disabled>Select Club</option>
                             <option v-for="c in orderedClubs" :key="c" :value="c">{{ c.toUpperCase() }}</option>
                         </select>
@@ -324,7 +325,7 @@
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
             setup() {
-                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v3';
+                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v4';
                 const M_TO_YD = 1.09361;
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
@@ -476,7 +477,7 @@
                 const relativeScoreColor = computed(() => { let d = 0; for(let i=0; i<18; i++) { const p = getHolePar(i); if(p > 0 && holeResults.value[i].score > 0) d += (holeResults.value[i].score - p); } return d > 0 ? 'text-red-400' : (d < 0 ? 'text-blue-400' : 'text-gray-300'); });
                 const countStat = (h, k) => holeResults.value[h].shots.filter(s => s[k]).length;
                 const calculateHalfTotal = (hIdx) => { let par = 0, scr = 0, pt = 0, fw = 0, ob = 0, pn = 0, bk = 0; for(let i=0; i<9; i++) { const idx = (hIdx * 9) + i, h = holeResults.value[idx], p = getHolePar(idx); par += p; scr += h.score; pt += h.putts; fw += (h.fw ? 1 : 0); ob += h.shots.filter(s=>s.ob).length; pn += h.shots.filter(s=>s.penalty).length; bk += h.shots.filter(s=>s.bunker).length; } return { par, score: scr, putts: pt, fw, ob, pn, bk }; };
-                const grandTotals = computed(() => { let par = 0, pt = 0; for(let i=0; i<18; i++) { par += getHolePar(i); pt += holeResults.value[i].putts; } return { par, putts: pt }; });
+                const grandTotals = computed(() => { let par = 0, pt = 0; for(let i=0; i<18; i++) { par += getHolePar(i); pt += holeResults.value[i].putts; } return { par, pt }; });
 
                 const processCsvData = (d) => { const parsed =[]; let cur = null; d.forEach(row => { if (row[1] === 'H1') { cur = { id: row[0], name: row[0], sections:[] }; parsed.push(cur); } else if (cur && row[0] && row[1]?.match(/^\d+$/)) { cur.sections.push({ name: row[0], pars: row.slice(1, 10).map(Number) }); } }); courses.value = parsed; localStorage.setItem('golf_courses', JSON.stringify(parsed)); settings.value.prefix = 'index'; };
                 const importCsv = (e) => { if (!e.target.files[0]) return; Papa.parse(e.target.files[0], { header: false, skipEmptyLines: true, complete: (res) => processCsvData(res.data) }); };
