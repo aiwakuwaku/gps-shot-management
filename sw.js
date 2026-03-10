@@ -1,4 +1,4 @@
-const CACHE_NAME = 'golf-app-v20-permanent';
+const CACHE_NAME = 'golf-app-v14-final-offline-fix';
 const urlsToCache = [
   './',
   './index.html',
@@ -13,7 +13,7 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // ネットワーク経由でVue.jsなどを一気に保存
+      // 外部CDNファイルをスマホ内に「最優先」でダウンロードして保存
       return cache.addAll(urlsToCache);
     })
   );
@@ -35,19 +35,20 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 通信発生時の処理: ネットワークが死んでいてもキャッシュを即座に返す
+// 通信処理：オフライン時は何があってもキャッシュから返す
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
-        return response; // キャッシュがあればそれを返す
+        return response; // 保存済みのVue.js等を返す
       }
       return fetch(event.request).then((res) => {
-        // 新しいリソースがあればついでに保存
         return caches.open(CACHE_NAME).then((cache) => {
           cache.put(event.request, res.clone());
           return res;
         });
+      }).catch(() => {
+        // オフラインかつキャッシュなし（基本発生しない）
       });
     })
   );
