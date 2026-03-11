@@ -8,15 +8,15 @@
     <meta name="theme-color" content="#121212">
     
     <!-- アイコン設定 -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=20">
-    <link rel="shortcut icon" href="icon-192.png?v=20">
-    <link rel="apple-touch-icon" href="icon-512.png?v=20">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=22">
+    <link rel="shortcut icon" href="icon-192.png?v=22">
+    <link rel="apple-touch-icon" href="icon-512.png?v=22">
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GolfShotPRO">
-    <link rel="manifest" href="manifest.json?v=20">
+    <link rel="manifest" href="manifest.json?v=22">
 
     <!-- 外部ライブラリ (CDN) - サービスワーカーがこれをスマホに永続保存します -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -24,9 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <style>
-        /* v-cloak: Vueの起動が完了するまで画面を物理的に非表示にし、{{}}の露出を防ぐ */
         [v-cloak] { display: none !important; }
-        
         select, input { font-size: 16px !important; }
         .header-grid { display: grid; grid-template-columns: 60px 1fr 60px; align-items: center; height: 64px; background-color: black; color: white; position: sticky; top: 0; z-index: 20; }
         .nav-bar { background-color: #121212; height: 70px; display: flex; align-items: center; justify-content: space-around; border-top: 1px solid #222; }
@@ -53,7 +51,6 @@
         <!-- Header -->
         <header class="header-grid shadow-lg">
             <div class="flex justify-center">
-                <!-- 左上の「？」ボタン：表示崩れを完全に修正 -->
                 <button @click="changeView('guide')" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 active:bg-gray-700 transition shadow-inner">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -78,23 +75,17 @@
                     <h2 class="text-xl font-bold italic font-serif">Guide & Glossary</h2>
                     <button @click="view = isRoundStarted ? 'summary' : 'settings'" class="text-sm font-bold text-blue-600">Close</button>
                 </div>
+
                 <div class="space-y-8 pb-10 text-gray-700 text-[11px] leading-relaxed">
                     <section class="space-y-3">
-                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">GPS飛距離計測の使い方</h3>
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-2 text-blue-900">
-                            <p>1. 打つ場所で<b>「地点A (打点)」</b>ボタンを押してGPSを取得します。</p>
-                            <p>2. ボール地点に移動して<b>「地点B (停止)」</b>ボタンを押すと飛距離(yd)が自動計算されます。</p>
-                            <p>3. 左右のブレ(Dispersion)を±5yd刻みで調整して保存します。</p>
-                        </div>
-                    </section>
-                    <section class="space-y-3">
-                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">操作の流れ</h3>
+                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">基本操作の流れ</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 text-gray-700">
-                            <div><p class="font-bold text-gray-900 mb-1">1. ラウンド準備</p><p>「Set」タブでコース選択とクラブ設定を行います。中断データは自動保存されます。</p></div>
-                            <div><p class="font-bold text-gray-900 mb-1">2. ショット記録</p><p>打数ごとにクラブと結果(◯△☓)を入力。方向(LRFB)を記録することで統計の精度が上がります。</p></div>
-                            <div><p class="font-bold text-gray-900 mb-1">3. スコアチェック</p><p>「ショット数＋罰打＋パット」が入力したスコアと一致しない場合、警告が出て次へ進めません。</p></div>
+                            <div><p class="font-bold text-gray-900 mb-1">1.準備 (Set)</p><p>コースデータをインポートし、クラブを選択します。中断しても自動保存されます。</p></div>
+                            <div><p class="font-bold text-gray-900 mb-1">2.ショット記録 (Input)</p><p>各ホールでクラブと結果を選択。方向(LRFB)を記録するとミス傾向が分析されます。</p></div>
+                            <div><p class="font-bold text-gray-900 mb-1">3.スコア確定 (Card)</p><p>パット数とトータルを入力。「実打数＋罰打＋パット」の不整合は警告されます。</p></div>
                         </div>
                     </section>
+
                     <section class="space-y-3">
                         <h3 class="font-black text-orange-600 border-l-4 border-orange-600 pl-2 uppercase tracking-tighter">ショット判定の定義</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-4">
@@ -103,19 +94,46 @@
                             <div class="flex gap-3 border-t pt-3"><span class="bg-red-600 text-white w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg">☓</span><div><p class="font-bold">確実に１打以上ロスする</p><p class="text-gray-500">OB、PN、林。狙うことが困難で、確実に打数を損なう状態。</p></div></div>
                         </div>
                     </section>
+
                     <section class="space-y-3 text-left">
                         <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter">用語と記号の解説</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-4">
                             <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">スコアカードの記号</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="text-red-600 font-bold">◯囲みスコア:</span> バーディ以下</li><li><span class="text-blue-600 font-bold">△囲みスコア:</span> ボギー</li><li><span class="text-gray-900 font-bold">□囲みスコア:</span> ダブルボギー以上</li><li><span class="text-green-600 font-bold italic">Hの◯囲み:</span> <span class="font-bold">Scramble</span> 成功。寄せワン。</li><li><span class="font-bold italic text-gray-800">Bの◯囲み:</span> <span class="font-bold text-gray-800">Sand Save</span> 成功。バンカーから2打以内。</li></ul></div>
-                            <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">統計メトリクス</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="font-bold text-gray-800">GIR (パーオン率):</span> 規定打数マイナス2打以下でグリーンに乗せた割合。</li><li><span class="font-bold text-gray-800">Score Loss:</span> OB(2打失)、PN/☓(1打失)の損失合計。</li></ul></div>
+                            <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">統計メトリクス</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="font-bold text-gray-800">GIR (パーオン率):</span> 規定打数マイナス2打以下でグリーンに乗せた割合。</li><li><span class="font-bold text-gray-800">Bogey-on率:</span> パーより1打少ない打数までに乗せた割合。</li><li><span class="font-bold text-gray-800">Score Loss:</span> OB(2打失)、PN/☓(1打失)の損失合計。</li></ul></div>
                         </div>
                     </section>
+
+                    <section class="space-y-3">
+                        <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left">特殊ルール</h3>
+                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-[11px] text-purple-900 leading-relaxed text-left">
+                            <p>「OB」または「PN」を選択すると、罰打を考慮し、次の1打分は自動的に罰打としてスキップされます。1打目OBなら次は3打目から入力します。</p>
+                        </div>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">GPS飛距離計測の使い方</h3>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-2 text-blue-900">
+                            <p>1. 打つ場所で<b>「地点A (打点)」</b>ボタンを押してGPSを取得します。</p>
+                            <p>2. ボール地点に移動して<b>「地点B (停止)」</b>ボタンを押すと飛距離(yd)が自動計算されます。</p>
+                            <p>3. 左右のブレ(Dispersion)を±5yd刻みで調整して保存します。</p>
+                        </div>
+                    </section>
+
                     <section class="space-y-3 text-left">
                         <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">中断して過去のデータを見るには</h3>
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-xs space-y-2 text-blue-900 font-bold">
+                        <!-- text-[11px] に統一済み -->
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-[11px] space-y-2 text-blue-900 font-bold">
                             <p>1. 入力中のデータを保存(save round)してからRound Historyで過去ラウンドを確認</p>
                             <p>2. 過去のラウンドを確認後にリセットボタン(reset all)を押す</p>
                             <p>3. Round Historyで入力途中のデータを読み込み続きから入力する。</p>
+                        </div>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter">オフラインでの利用</h3>
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100 space-y-2 text-green-900">
+                            <p>本アプリはPWA対応です。山間部でも動作します。一度読み込めばオフラインで起動可能です。</p>
+                            <p>データはブラウザのLocal Storageに保存されます。定期的に「History」から「Export CSV」を行い、バックアップを推奨します。</p>
                         </div>
                     </section>
                 </div>
@@ -152,7 +170,7 @@
                 </div>
             </div>
 
-            <!-- 2. Hole Input Screen (Select Dropdown) -->
+            <!-- 2. Hole Input Screen -->
             <div v-if="view === 'hole'" class="space-y-4 animate-in fade-in duration-300">
                 <div class="flex justify-between items-center bg-gray-100 p-3 rounded border">
                     <button @click="prevHole" class="text-xl px-2">◀</button>
@@ -256,14 +274,14 @@
                     </div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border shadow-sm text-xs font-bold text-gray-600 uppercase">
-                    <h3 class="text-sm font-black text-gray-800 mb-4 uppercase italic tracking-tighter">Skill Categories</h3>
+                    <h3 class="text-sm font-black text-gray-800 mb-4 uppercase italic tracking-tighter font-black">Skill Categories</h3>
                     <div v-for="(val, label) in analysis.categories" :key="label" class="mb-5 font-bold">
                         <div class="flex justify-between mb-1.5 font-black uppercase tracking-tighter text-gray-600"><span>{{ label }}</span><span>{{ val }}%</span></div>
                         <div class="progress-bar"><div class="progress-fill shadow-inner" :style="{ width: val + '%', backgroundColor: val > 60 ? '#10b981' : val > 40 ? '#fbbf24' : '#ef4444' }"></div></div>
                     </div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border shadow-sm overflow-x-auto text-gray-700 font-bold">
-                    <h3 class="text-sm font-black mb-4 italic uppercase tracking-tighter underline underline-offset-4">Club Performance & Distance</h3>
+                    <h3 class="text-sm font-black mb-4 italic uppercase tracking-tighter underline underline-offset-4 font-black">Club Performance & Distance</h3>
                     <table class="w-full text-[11px] font-bold">
                         <thead><tr class="text-gray-400 border-b font-black text-center"><th class="text-left pb-3 uppercase">Club</th><th class="pb-3 uppercase">Distance</th><th class="pb-3 uppercase">Disp. Width</th><th class="pb-3 uppercase">Success</th></tr></thead>
                         <tbody><tr v-for="c in analysis.clubStats" :key="c.name" class="border-b last:border-0"><td class="py-4 text-sm font-black text-black text-left italic font-bold text-gray-800">{{ c.name }}</td><td class="text-center font-black text-blue-600">{{ c.avgDist }}y</td><td class="text-center"><div class="flex flex-col items-center"><span class="text-[10px] font-black text-gray-700">L{{ c.maxL }} ~ R{{ c.maxR }}</span><span class="text-[9px] text-red-500 font-bold">Width: {{ c.totalWidth }}y</span></div></td><td class="text-center font-black text-gray-800">{{ c.successRate }}%<br><span class="text-[8px] text-gray-400 font-normal">({{ c.count }} shots)</span></td></tr></tbody>
@@ -295,7 +313,7 @@
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
             setup() {
-                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v20';
+                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v22_stable';
                 const M_TO_YD = 1.09361;
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
