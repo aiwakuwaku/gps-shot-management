@@ -69,7 +69,7 @@
         </header>
 
         <main class="p-4 flex-grow pb-24 overflow-y-auto">
-            <!-- 0. Guide Screen -->
+            <!-- 0. Guide Screen (見出しを大きく修正) -->
             <div v-if="view === 'guide'" class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <div class="flex justify-between items-center border-b pb-1 text-gray-800">
                     <h2 class="text-xl font-bold italic font-serif">Guide & Glossary</h2>
@@ -78,7 +78,7 @@
 
                 <div class="space-y-8 pb-10 text-gray-700 text-[11px] leading-relaxed">
                     <section class="space-y-3">
-                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">基本操作の流れ</h3>
+                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter text-sm">基本操作の流れ</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 text-gray-700">
                             <div><p class="font-bold text-gray-900 mb-1">1.準備 (Set)</p><p>コースデータをインポートし、クラブを選択します。中断しても自動保存されます。</p></div>
                             <div><p class="font-bold text-gray-900 mb-1">2.ショット記録 (Input)</p><p>各ホールでクラブと結果を選択。方向(LRFB)を記録するとミス傾向が分析されます。</p></div>
@@ -96,7 +96,7 @@
                     </section>
 
                     <section class="space-y-3 text-left">
-                        <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter">用語と記号の解説</h3>
+                        <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter text-sm">用語と記号の解説</h3>
                         <div class="bg-white p-4 rounded-xl border shadow-sm space-y-4">
                             <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">スコアカードの記号</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="text-red-600 font-bold">◯囲みスコア:</span> バーディ以下</li><li><span class="text-blue-600 font-bold">△囲みスコア:</span> ボギー</li><li><span class="text-gray-900 font-bold">□囲みスコア:</span> ダブルボギー以上</li><li><span class="text-green-600 font-bold italic">Hの◯囲み:</span> <span class="font-bold">Scramble</span> 成功。寄せワン。</li><li><span class="font-bold italic text-gray-800">Bの◯囲み:</span> <span class="font-bold text-gray-800">Sand Save</span> 成功。バンカーから2打以内。</li></ul></div>
                             <div><h4 class="font-bold text-green-700 border-b mb-1 uppercase tracking-widest text-[10px]">統計メトリクス</h4><ul class="list-disc list-inside space-y-1 text-gray-600"><li><span class="font-bold text-gray-800">GIR (パーオン率):</span> 規定打数マイナス2打以下でグリーンに乗せた割合。</li><li><span class="font-bold text-gray-800">Bogey-on率:</span> パーより1打少ない打数までに乗せた割合。</li><li><span class="font-bold text-gray-800">Score Loss:</span> OB(2打失)、PN/☓(1打失)の損失合計。</li></ul></div>
@@ -104,14 +104,14 @@
                     </section>
 
                     <section class="space-y-3">
-                        <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left">特殊ルール</h3>
+                        <h3 class="font-black text-purple-600 border-l-4 border-purple-600 pl-2 uppercase tracking-tighter text-left text-sm">特殊ルール</h3>
                         <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-[11px] text-purple-900 leading-relaxed text-left">
                             <p>「OB」または「PN」を選択すると、罰打を考慮し、次の1打分は自動的に罰打としてスキップされます。1打目OBなら次は3打目から入力します。</p>
                         </div>
                     </section>
 
                     <section class="space-y-3">
-                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">GPS飛距離計測の使い方</h3>
+                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter text-sm">GPS飛距離計測の使い方</h3>
                         <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-2 text-blue-900">
                             <p>1. 打つ場所で<b>「地点A (打点)」</b>ボタンを押してGPSを取得します。</p>
                             <p>2. ボール地点に移動して<b>「地点B (停止)」</b>ボタンを押すと飛距離(yd)が自動計算されます。</p>
@@ -120,8 +120,7 @@
                     </section>
 
                     <section class="space-y-3 text-left">
-                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter">中断して過去のデータを見るには</h3>
-                        <!-- text-[11px] に統一済み -->
+                        <h3 class="font-black text-blue-600 border-l-4 border-blue-600 pl-2 uppercase tracking-tighter text-sm">中断して過去のデータを見るには</h3>
                         <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-[11px] space-y-2 text-blue-900 font-bold">
                             <p>1. 入力中のデータを保存(save round)してからRound Historyで過去ラウンドを確認</p>
                             <p>2. 過去のラウンドを確認後にリセットボタン(reset all)を押す</p>
@@ -130,7 +129,7 @@
                     </section>
 
                     <section class="space-y-3">
-                        <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter">オフラインでの利用</h3>
+                        <h3 class="font-black text-green-600 border-l-4 border-green-600 pl-2 uppercase tracking-tighter text-sm">オフラインでの利用</h3>
                         <div class="bg-green-50 p-4 rounded-xl border border-green-100 space-y-2 text-green-900">
                             <p>本アプリはPWA対応です。山間部でも動作します。一度読み込めばオフラインで起動可能です。</p>
                             <p>データはブラウザのLocal Storageに保存されます。定期的に「History」から「Export CSV」を行い、バックアップを推奨します。</p>
@@ -274,14 +273,14 @@
                     </div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border shadow-sm text-xs font-bold text-gray-600 uppercase">
-                    <h3 class="text-sm font-black text-gray-800 mb-4 uppercase italic tracking-tighter font-black">Skill Categories</h3>
+                    <h3 class="text-sm font-black text-gray-800 mb-4 uppercase italic tracking-tighter">Skill Categories</h3>
                     <div v-for="(val, label) in analysis.categories" :key="label" class="mb-5 font-bold">
                         <div class="flex justify-between mb-1.5 font-black uppercase tracking-tighter text-gray-600"><span>{{ label }}</span><span>{{ val }}%</span></div>
                         <div class="progress-bar"><div class="progress-fill shadow-inner" :style="{ width: val + '%', backgroundColor: val > 60 ? '#10b981' : val > 40 ? '#fbbf24' : '#ef4444' }"></div></div>
                     </div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border shadow-sm overflow-x-auto text-gray-700 font-bold">
-                    <h3 class="text-sm font-black mb-4 italic uppercase tracking-tighter underline underline-offset-4 font-black">Club Performance & Distance</h3>
+                    <h3 class="text-sm font-black mb-4 italic uppercase tracking-tighter underline underline-offset-4">Club Performance & Distance</h3>
                     <table class="w-full text-[11px] font-bold">
                         <thead><tr class="text-gray-400 border-b font-black text-center"><th class="text-left pb-3 uppercase">Club</th><th class="pb-3 uppercase">Distance</th><th class="pb-3 uppercase">Disp. Width</th><th class="pb-3 uppercase">Success</th></tr></thead>
                         <tbody><tr v-for="c in analysis.clubStats" :key="c.name" class="border-b last:border-0"><td class="py-4 text-sm font-black text-black text-left italic font-bold text-gray-800">{{ c.name }}</td><td class="text-center font-black text-blue-600">{{ c.avgDist }}y</td><td class="text-center"><div class="flex flex-col items-center"><span class="text-[10px] font-black text-gray-700">L{{ c.maxL }} ~ R{{ c.maxR }}</span><span class="text-[9px] text-red-500 font-bold">Width: {{ c.totalWidth }}y</span></div></td><td class="text-center font-black text-gray-800">{{ c.successRate }}%<br><span class="text-[8px] text-gray-400 font-normal">({{ c.count }} shots)</span></td></tr></tbody>
@@ -313,7 +312,7 @@
         const { createApp, ref, computed, onMounted, watch } = Vue;
         createApp({
             setup() {
-                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v22_stable';
+                const PERSIST_KEY = 'golf_mgr_v999_final_pwa_v22_final_stable';
                 const M_TO_YD = 1.09361;
                 const restored = JSON.parse(localStorage.getItem(PERSIST_KEY) || '{}');
                 const clubMaster =['1w', '3w', '5w', '3u', '4u', '5u', '5i', '6i', '7i', '8i', '9i', 'pw', '48°', '50°', '52°', '54°', '56°', '58°', 'pt'];
